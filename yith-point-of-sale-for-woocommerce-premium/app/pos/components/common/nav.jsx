@@ -27,7 +27,7 @@ function NavItem( { itemKey, active, enabled, onClick, icon, label, description 
 			}
 		>
 			{!!icon && <i className={`nav-item__icon yith-pos-icon-${icon}`}/>}
-			<span className="nav-item__label-container">
+			<span className="nav-item__label-container" style={{textAlign: 'center'}}>
 				<span className="nav-item__label">
 					{label}
 				</span>

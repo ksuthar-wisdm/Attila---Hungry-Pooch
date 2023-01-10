@@ -30,6 +30,11 @@ class CartTotal extends Component {
                 break;
         }
 
+        /* Added by WisdmLabs */
+        if ( total.label.toString().toLowerCase().includes( 'points redeemed' ) ) {
+            onEdit = total.removable ? this.props.editRedeemPoints : noop;
+        }
+        /* Added by WisdmLabs */
 
         return (
             <div key={index} className={className}>

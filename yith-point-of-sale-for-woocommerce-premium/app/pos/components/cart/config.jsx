@@ -26,6 +26,14 @@ export const cartActions = [
 		icon          : 'yith-pos-icon-gift-card',
 		onClickHandler: 'applyCoupon'
 	},
+	// Added by WisdmLabs
+	{
+		id            : 'redeem-points',
+		label         : __( 'Redeem Points', 'yith-point-of-sale-for-woocommerce' ),
+		icon          : 'yith-pos-icon-coin',
+		onClickHandler: 'redeemPoints'
+	},
+	// Added by WisdmLabs
 	{
 		id            : 'add-shipping',
 		label         : __( 'Shipping', 'yith-point-of-sale-for-woocommerce' ),
@@ -87,7 +95,12 @@ export const i18n_cart_label = {
 	submitShippingLabel  : __( 'Save Shipping', 'yith-point-of-sale-for-woocommerce' ),
 	totalPayable         : __( 'Total due', 'yith-point-of-sale-for-woocommerce' ),
 	totalPaying          : __( 'Total paying', 'yith-point-of-sale-for-woocommerce' ),
-	typeLabel            : __( 'Add fee or discount', 'yith-point-of-sale-for-woocommerce' )
+	typeLabel            : __( 'Add fee or discount', 'yith-point-of-sale-for-woocommerce' ),
+	// Added by WisdmLabs
+	points               : __( 'Points', 'yith-point-of-sale-for-woocommerce' ),
+	redeemPointsButton   : __( 'Redeem Points', 'yith-point-of-sale-for-woocommerce' ),
+	enterRedeemPoints    : __( 'Enter Points to Redeem', 'yith-point-of-sale-for-woocommerce' ),
+	// Added by WisdmLabs
 };
 
 export const selectFeeOptions = [

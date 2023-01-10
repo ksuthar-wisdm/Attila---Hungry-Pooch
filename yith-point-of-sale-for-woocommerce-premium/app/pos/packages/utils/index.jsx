@@ -112,6 +112,13 @@ export const isValidEmail = email => {
 	return pattern.test( email );
 }
 
+/* Added by WisdmLabs */
+export const isValidPhone = phone => {
+	const pattern = new RegExp( /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i );
+	return pattern.test( phone );
+}
+/* Added by WisdmLabs */
+
 /**
  * Split a string into an array with sprintf-style tokens as the delimiter.
  *

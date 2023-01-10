@@ -11,7 +11,7 @@ class CartAction extends Component {
 
     render() {
 
-        const { action }                           = this.props;
+        const { action } = this.props;
         const { id, icon, label, altLabel, altConditionCb, disabled } = action;
 
         let className = "cart-action cart-action--" + id;

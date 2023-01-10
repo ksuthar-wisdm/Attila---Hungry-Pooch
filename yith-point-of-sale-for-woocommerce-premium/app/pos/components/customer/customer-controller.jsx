@@ -39,7 +39,7 @@ if ( userCan( 'yith_pos_create_users' ) ) {
 
 const defaultNewCustomerData = applyFilters( 'yith_pos_default_new_customer_data', {} );
 
-export default function CustomerController( { customer: currentCustomer, onClose, onChange } ) {
+export default function CustomerController( { customer: currentCustomer, cart, onClose, onChange } ) {
 	const isGuest = currentCustomer.id === 0;
 
 	/**
@@ -57,6 +57,20 @@ export default function CustomerController( { customer: currentCustomer, onClose
 	const isEditingCurrentCustomer              = editingCustomer?.id && editingCustomer?.id === currentCustomer.id;
 
 	const handleReset = () => {
+
+		/* Added by WisdmLabs */
+		let codes = [];
+		cart._getCartCoupons().map( ( discount, i ) => {
+			if ( discount.description.toString().toLowerCase().includes( 'points redeemed' ) ) {
+				codes.push( discount.code );
+			}
+		} );
+
+		codes.map( ( code, i )  => {
+			cart.removeCoupon( code );
+		} );
+		/* Added by WisdmLabs */
+
 		setView( 'type' );
 		setLoadedCustomer( Customer() );
 		onChange( Customer() ); // Set customer to be guest.
@@ -103,7 +117,8 @@ export default function CustomerController( { customer: currentCustomer, onClose
 			modalTitle    = __( 'Load a customer profile', 'yith-point-of-sale-for-woocommerce' );
 			break;
 		case 'current-customer':
-			viewComponent = <CustomerDetails customer={currentCustomer} onClear={handleReset} onConfirm={changeAndClose} onEdit={handleCustomerEdit} mode="edit"/>
+			viewComponent = <CustomerDetails customer={currentCustomer}
+				onClear={handleReset} onConfirm={changeAndClose} onEdit={handleCustomerEdit} mode="edit"/>
 			modalTitle    = __( 'Current customer profile', 'yith-point-of-sale-for-woocommerce' );
 			break;
 		case 'edit-customer':

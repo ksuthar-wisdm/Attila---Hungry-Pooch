@@ -1,0 +1,11 @@
+{
+    "name": "hp/yith-point-of-sale-for-woocommerce-premium-with-source",
+    "autoload": {
+        "psr-4": {
+            "Hp\\YithPointOfSaleForWoocommercePremiumWithSource\\": "src/"
+        }
+    },
+    "require-dev": {
+        "symfony/dotenv": "^5.4"
+    }
+}

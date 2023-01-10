@@ -4794,4 +4794,30 @@ span.yith-pos-icon-calculator {
   }
 }
 
-/*# sourceMappingURL=pos.css.map */
+/* Added by WisdmLabs */
+.cart-actions {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-areas: "add-note add-note . . . empty-cart empty-cart"
+ "add-fee-or-discount apply-coupon redeem-points add-shipping suspend-and-save-cart pay pay";
+}
+
+.cart-action--redeem-points {
+  -ms-grid-row: 2;
+  -ms-grid-column: 3;
+  grid-area: redeem-points;
+}
+
+@media screen and (max-width: 1200px) {
+  .cart-actions {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-areas: ". . . add-note add-note empty-cart empty-cart"
+ "add-fee-or-discount apply-coupon redeem-points add-shipping suspend-and-save-cart pay";
+  }
+}
+/* Added by WisdmLabs */

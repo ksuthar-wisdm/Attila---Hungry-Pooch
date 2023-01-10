@@ -1,0 +1,22 @@
+/* Added by WisdmLabs */
+.cart-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: "add-note add-note . . . empty-cart empty-cart"
+        "add-fee-or-discount apply-coupon redeem-points add-shipping suspend-and-save-cart pay pay";
+}
+
+.cart-action--redeem-points {
+    grid-area: redeem-points;
+}
+
+@media screen and ( max-width: 1200px ) {
+    .cart-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-areas: ". . . add-note add-note empty-cart empty-cart"
+          "add-fee-or-discount apply-coupon redeem-points add-shipping suspend-and-save-cart pay pay";
+    }
+}
+
+/* Added by WisdmLabs */

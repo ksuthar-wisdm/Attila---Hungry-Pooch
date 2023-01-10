@@ -16,7 +16,10 @@ const defaults = {
     shipping          : {},
     is_paying_customer: false,
     avatar_url        : yithPosSettings.assetsUrl + '/images/default_avatar.svg',
-    meta_data         : []
+    meta_data         : [],
+    /* Added by WisdmLabs */
+    points            : 0
+    /* Added by WisdmLabs */
 };
 
 const Customer = function ( params = {} ) {

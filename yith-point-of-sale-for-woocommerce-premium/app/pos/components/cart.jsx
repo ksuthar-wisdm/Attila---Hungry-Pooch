@@ -10,7 +10,7 @@ import { cartActions, cartButtons, i18n_cart_label } from './cart/config.jsx';
 import CartNoteBox                                   from "./cart/cart-note-box";
 import Nav                                           from "./common/nav";
 import CartSavedList                                 from "./cart/cart-saved-list";
-import { getCustomerFullName }                       from '../packages/customers';
+import { getCustomerFullName, getCustomerPoints }    from '../packages/customers';
 
 
 class Cart extends Component {
@@ -70,7 +70,10 @@ class Cart extends Component {
 				  savedCartAction,
 				  savedCarts,
 				  editSavedCartNote,
-				  isCartEmpty
+				  isCartEmpty,
+				  /* Added by WisdmLabs */
+				  editRedeemPoints
+				  /* Added by WisdmLabs */
 			  } = this.props;
 
 		const isGuest        = !customer?.id;
@@ -82,12 +85,20 @@ class Cart extends Component {
 			{ key: 'cart', label: i18n_cart_label.cart, icon: 'cart', active: !showSavedCarts, onClick: () => onAction( 'cart' ) },
 			{ key: 'customer', label: i18n_cart_label.customer, description: getCustomerFullName( customer ), icon: 'customer', active: false, onClick: () => onAction( 'customer' ) },
 			{ key: 'address', label: i18n_cart_label.address, icon: 'location', active: false, onClick: () => onAction( 'address' ) },
+			/* Addec by WisdmLabs */
+			{ key: 'customer-points', label: i18n_cart_label.points, description: getCustomerPoints( customer ), icon: 'coin', active: false },
+			/* Addec by WisdmLabs */
 			{ key: 'saved-carts', label: '', icon: 'saved-cart', active: showSavedCarts, enabled: !!savedCarts.length, onClick: () => onAction( 'saved-carts' ) }
 		];
 
-		if ( !isGuest ) {
+		if ( ! isGuest ) {
 			cartNavItems = cartNavItems.filter( _ => _.key !== 'address' );
 		}
+		/* Addec by WisdmLabs */
+		else {
+			cartNavItems = cartNavItems.filter( _ => _.key !== 'customer-points' );
+		}
+		/* Addec by WisdmLabs */
 
 		return (
 
@@ -124,6 +135,9 @@ class Cart extends Component {
 						return ( <CartTotal key={index} total={total} index={index}
 							removeFeeOrDiscount={removeFeeOrDiscount}
 							editFeeOrDiscount={editFeeOrDiscount}
+							/* Added by WisdmLabs */
+							editRedeemPoints={editRedeemPoints}
+							/* Added by WisdmLabs */
 							removeShippingMethod={removeShippingMethod}
 							editShippingMethod={editShippingMethod} removeCoupon={removeCoupon}/> )
 					} )}
@@ -135,8 +149,8 @@ class Cart extends Component {
 				{!showSavedCarts && <div className="cart-actions">
 					{cartActions.map( ( action ) => {
 						const actionOnClickHandler = action.onClickHandler && action.onClickHandler in this.props ?
-													 this.props[ action.onClickHandler ] :
-													 noop;
+													this.props[ action.onClickHandler ] :
+													noop;
 
 						if ( action.id === 'empty-cart' && isCartEmpty ) {
 							return null;
@@ -145,6 +159,18 @@ class Cart extends Component {
 						if ( action.id === 'suspend-and-save-cart' || action.id === 'pay' ) {
 							action.disabled = ( items.length === 0 );
 						}
+
+						/* Added by WisdmLabs */
+						if ( action.id === 'redeem-points' ) {
+							let pointsAdded = false;
+							this.props.totals.map( ( total, i ) => {
+								if ( total.label.toString().toLowerCase().includes( 'points redeemed' ) ) {
+									pointsAdded = true;
+								}
+							} );
+							action.disabled = isGuest || pointsAdded;
+						}
+						/* Added by WisdmLabs */
 
 						return (
 							<CartAction key={action.id} action={action} onClick={actionOnClickHandler}/>

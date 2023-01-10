@@ -12,6 +12,9 @@ import ControlledModal          from './common/controlled-modal.jsx';
 import ProductVariationSelector from './products/product-variation-selector';
 import CartAddNote              from './cart/cart-add-note';
 import CartApplyCoupon          from './cart/cart-apply-coupon';
+/* Added by WisdmLabs */
+import CartRedeemPoints         from './cart/cart-redeem-points.jsx';
+/* Added by WisdmLabs */
 import CartAddFeeOrDiscount     from './cart/cart-add-fee-or-discount';
 import CartSaveAddBox           from './cart/cart-save-add-box';
 import CartPayment              from './cart/cart-payment';
@@ -439,6 +442,60 @@ class App extends Component {
 		this._updateCurrentCart();
 	};
 
+	/* Added by WisdmLabs */
+	/** Points */
+	redeemPointsModal = () => {
+		if ( this.checkCapability( 'view_coupons' ) ) {
+			const cartTotals = this.cartManager.totals();
+			const customer   = this.cartManager.getCartCustomer();
+			const title      = __( 'Redeem Points', 'yith-point-of-sale-for-woocommerce' ) +
+								`<span class='modal__title-price'>${ customer.points }</span>`;
+			this.openModal(
+				<CartRedeemPoints
+					customer={ customer }
+					cartTotals={ cartTotals }
+					redeemAndApplyPoints={ this.redeemAndApplyPoints } />,
+				title,
+				'modal-close-space'
+			);
+		}
+	};
+
+	editRedeemPoints = ( key = '' ) => {
+		const currentPoints = this.cartManager.getFeeOrDiscount( key );
+		let old_points      = parseInt( currentPoints?.reason ?? 0 );
+		const cartTotals    = this.cartManager.totals();
+		const customer      = this.cartManager.getCartCustomer();
+		const title         = __( 'Redeem Points', 'yith-point-of-sale-for-woocommerce' ) +
+							`<span class='modal__title-price'>${ customer.points + old_points }</span>`;
+		this.openModal(
+			<CartRedeemPoints
+				currentPoints={ currentPoints }
+				customer={ customer }
+				cartTotals={ cartTotals }
+				redeemAndApplyPoints={ this.redeemAndApplyPoints }
+				onUndo={this.closeModal} />,
+			title,
+			'modal-close-space'
+		);
+	};
+
+	redeemAndApplyPoints = discount => {
+
+		if ( typeof discount.key !== 'undefined' ) {
+			this.cartManager.editFeeOrDiscount( discount.key, discount );
+		} else {
+			this.cartManager.addFeeOrDiscount( discount );
+		}
+
+		const customer  = this.cartManager.getCartCustomer();
+		customer.points = customer.points + discount.old_points - discount.points;
+		this.cartManager.setCartCustomer( customer );
+		this._updateCurrentCart();
+		this.closeModal();
+	}
+	/* Added by WisdmLabs */
+
 	editCartNoteModal = () => {
 		const formattedTotal = formatCurrency( this.cartManager.getCartTotal() );
 		const cartNote       = this.cartManager.getNote();
@@ -447,7 +504,6 @@ class App extends Component {
 		this.openModal( <CartAddNote saveCartNote={this.saveCartNote} currentNote={cartNote}
 			cartTotal={formattedTotal}/>, title, 'modal-add-note modal-close-space' )
 	};
-
 
 	saveCartNote = ( note ) => {
 		this.cartManager.setNote( note );
@@ -463,7 +519,6 @@ class App extends Component {
 	getTestTotalWithoutFee = ( fee ) => {
 		return typeof fee !== 'undefined' ? this.cartManager.getTestTotalWithoutFee( fee ) : this.cartManager.getTotal( 'total' );
 	};
-
 
 	editFeeOrDiscount = ( key = '' ) => {
 		const currentFeeOrDiscount = this.cartManager.getFeeOrDiscount( key );
@@ -487,6 +542,13 @@ class App extends Component {
 	};
 
 	removeFeeOrDiscount = ( key ) => {
+		/* Added by WisdmLabs */
+		let discountPoints = this.cartManager.getCoupon( key );
+		let pointsToAdd    = parseInt( discountPoints.description );
+		let customer       = this.cartManager.getCartCustomer();
+		customer.points    = customer.points + pointsToAdd;
+		this.cartManager.setCartCustomer( customer );
+		/* Added by WisdmLabs */
 		if ( this.cartManager.removeFeeOrDiscount( key ) ) {
 			this._updateCurrentCart();
 		}
@@ -719,7 +781,11 @@ class App extends Component {
 			savedCartAction     : this.savedCartAction,
 			editSavedCartNote   : this.editSavedCartNote,
 			onAction            : this.setAction,
-			pay                 : this.payModal
+			pay                 : this.payModal,
+			/* Added by WisdmLabs */
+			redeemPoints        : this.redeemPointsModal,
+			editRedeemPoints    : this.editRedeemPoints
+			/* Added by WisdmLabs */
 		};
 
 		const orderHistoryProps = {
@@ -757,6 +823,9 @@ class App extends Component {
 									isEditingCustomer &&
 									<CustomerController
 										customer={customer}
+										/* Added by WisdmLabs */
+										cart={ this.cartManager }
+										/* Added by WisdmLabs */
 										onClose={() => this.setState( { isEditingCustomer: false } )}
 										onChange={( _ ) => this.updateCustomer( _ )}
 									/>

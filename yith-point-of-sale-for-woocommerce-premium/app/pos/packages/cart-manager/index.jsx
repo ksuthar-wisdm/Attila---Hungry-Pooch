@@ -275,6 +275,7 @@ export class CartManager {
 
 	getCouponTotals = () => {
 		const reduce = ( acc, coupon ) => {
+
 			let label = __( 'COUPON', 'yith-point-of-sale-for-woocommerce' ) + ' - ' + coupon.code;
 			let type  = 'coupon';
 
@@ -299,6 +300,7 @@ export class CartManager {
 				key      : coupon.code
 			}] );
 		};
+
 		return this.#appliedCoupons.reduce( reduce, [] );
 	};
 
@@ -407,12 +409,13 @@ export class CartManager {
 
 	addFeeOrDiscount = ( item ) => {
 		let currentItems  = this._getCartFeesAndDiscounts();
+
 		const defaultItem = {
 			key       : Date.now(),
 			type      : 'fee',
 			amount    : 0,
 			percentage: false,
-			reason    : ''
+			reason    : '',
 		};
 
 		item        = Object.assign( defaultItem, item );
@@ -425,7 +428,11 @@ export class CartManager {
 				code         : couponKey,
 				amount       : item.amount,
 				discount_type: item.percentage ? 'percent' : 'fixed_cart',
-				description  : item.reason
+				description  : item.reason,
+				/* Added by WisdmLabs */
+				is_points    : item.is_points ?? 0,
+				points       : item.points ?? false
+				/* Added by WisdmLabs */
 			};
 
 			this.addCoupon( couponData );
@@ -460,7 +467,11 @@ export class CartManager {
 				code         : key,
 				amount       : attr.amount,
 				discount_type: attr.percentage ? 'percent' : 'fixed_cart',
-				description  : attr.reason
+				description  : attr.reason,
+				/* Added by WisdmLabs */
+				is_points    : attr.is_points ?? 0,
+				points       : attr.points ?? false
+				/* Added by WisdmLabs */
 			};
 			return this.editCoupon( couponData );
 		}
@@ -1145,6 +1156,29 @@ export class CartManager {
 			{ key: '_yith_pos_register', value: String( yithPosSettings.register.id ) },
 			{ key: '_yith_pos_cashier', value: String( yithPosSettings.user.id ) }
 		];
+
+		/* Added by WisdmLabs */
+		let points         = false;
+		let pointsDiscount = 0;
+		this._getCartCoupons().map( ( coupon, i ) => {
+			if ( coupon.is_points && coupon.points ) {
+				points         = coupon.points;
+				pointsDiscount = coupon.amount;
+			}
+		} );
+
+		if ( points && pointsDiscount > 0 ) {
+			orderMeta.push( {
+				key: '_wdm_yith_pos_points',
+				value: Number( points )
+			} );
+			orderMeta.push( {
+				key: '_wdm_yith_pos_points_discount',
+				value: pointsDiscount
+			} );
+		}
+
+		/* Added by WisdmLabs */
 
 		if ( vat ) {
 			orderMeta.push( { key: '_billing_vat', value: vat } );

@@ -30,7 +30,7 @@ export default function CustomerSelector( { onSelect, focusOnMount, notFoundRend
 
 			timeout = setTimeout(
 				() => {
-					apiFetch( { path: addQueryArgs( 'wc/v3/customers', query ) } )
+					apiFetch( { path: addQueryArgs( 'wdm_yith_customisation/v1/get_customers', query ) } )
 						.then( loadedCustomers => {
 							setCustomers( loadedCustomers ?? [] );
 							setIsLoading( false );

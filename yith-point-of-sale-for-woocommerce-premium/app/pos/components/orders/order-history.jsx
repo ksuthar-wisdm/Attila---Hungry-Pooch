@@ -131,6 +131,11 @@ class OrderHistory extends Component {
 			if ( !_.isEmpty( orderGrouped ) && orderGrouped.length > 0 ) {
 				orderGrouped[ 0 ][ 'opened' ] = true;
 				this.setState( { currentOrder: orderGrouped[ 0 ].items[ 0 ] } );
+				/* Adde by WisdmLabs */
+				let order = orderGrouped[ 0 ].items[ 0 ];
+				this.setCustomerPoints( order );
+				/* Adde by WisdmLabs */
+				this.setState( { currentOrder: order } );
 			}
 
 			this.setState( { orders: orderGrouped, loading: false, orderList, allLoaded } );
@@ -201,7 +206,22 @@ class OrderHistory extends Component {
 		}
 	};
 
+	/* Added by WisdmLabs */
+	setCustomerPoints = order => {
+		apiFetch( { path: addQueryArgs( 'wdm_yith_customisation/v1/points', { user_id: order.customer_id } ) } )
+			.then( points => {
+				order.customer_points = points;
+				this.setState( { currentOrder: order } );
+			} )
+			.catch( error => console.log( error.message ) );
+	}
+	/* Added by WisdmLabs */
+
 	showSelectedOrder = ( order ) => {
+		/* Added by WisdmLabs */
+		order.customer_points = '-';
+		this.setCustomerPoints( order );
+		/* Added by WisdmLabs */
 		this.setState( { currentOrder: order } );
 	}
 

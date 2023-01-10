@@ -12,7 +12,7 @@ class CartAddFeeOrDiscount extends Form {
 	constructor() {
 		super( ...arguments );
 		const { currentFeeOrDiscount } = this.props;
-		let defaultData                = {
+		let defaultData = {
 			type      : 'discount',
 			typeAmount: 'fixed',
 			amount    : '0',
@@ -86,7 +86,6 @@ class CartAddFeeOrDiscount extends Form {
 
 		const { onUndo, getTestTotalWithFee } = this.props;
 		const { data, amountFocus }           = this.state;
-
 
 		const amountToPay = formatCurrency( getTestTotalWithFee( data ) );
 		const formClass   = "cart-add-fee-or-discount" + ( amountFocus ? " focus-on-amount" : '' );

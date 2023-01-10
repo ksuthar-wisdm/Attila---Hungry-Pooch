@@ -47,6 +47,6 @@ export default function OrderReceiptPrintControl( { order } ) {
 				{OR_TEXT_PARTS[ 1 ]}
 			</div>}
 		</div>
-		<OrderReceiptPrint order={order} isGift={isGiftEnabled && isGift}/>
+		<OrderReceiptPrint order={order} isGift={isGiftEnabled && isGift} />
 	</>
 }

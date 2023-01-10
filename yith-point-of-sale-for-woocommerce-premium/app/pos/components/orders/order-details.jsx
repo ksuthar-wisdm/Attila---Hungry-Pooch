@@ -1,7 +1,9 @@
 /** global yithPosSettings */
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { __, _x, sprintf }  from '@wordpress/i18n';
 import { dateI18n }         from '@wordpress/date';
+import apiFetch             from '@wordpress/api-fetch';
+import { addQueryArgs }     from '@wordpress/url';
 
 import { formatCurrency }                                                                                                               from '../../packages/numbers';
 import OrderDetailsLineItemProduct                                                                                                      from './order-details-line-item-product';
@@ -21,6 +23,13 @@ const ORDER_DETAILS_SHOW_LINE_ITEMS_FILTER = 'yith_pos_order_details_show_line_i
 
 class OrderDetails extends Component {
 
+	/* Added by WisdmLabs */
+	// constructor( props ) {
+	// 	super( props );
+	// 	this.state = { totalPoints: '-' };
+	// }
+	/* Added by WisdmLabs */
+
 	render() {
 		const { order }                                                                                                                                                            = this.props;
 		const { id, number, line_items, shipping_lines, fee_lines, coupon_lines, total, total_tax, payment_method, date_created_gmt, status, billing, customer_id, customer_note } = order;
@@ -39,6 +48,12 @@ class OrderDetails extends Component {
 			customer = !!customer_id ? `#${customer_id}` : __( 'Guest', 'yith-point-of-sale-for-woocommerce' );
 		}
 
+		/* Added by WisdmLabs */
+		// apiFetch( { path: addQueryArgs( 'wdm_yith_customisation/v1/points', { user_id: customer_id } ) } )
+		// 	.then( points => this.setState( { totalPoints: points } ) )
+		// 	.catch( error => alert( error.message ) );
+		/* Added by WisdmLabs */
+
 		const paymentDetails       = getOrderPaymentDetails( order );
 		const formattedDateCreated = getOrderFormattedDateTime( order );
 
@@ -49,13 +64,13 @@ class OrderDetails extends Component {
 				<div className="yith-pos-order-details__details">
 
 					<div className="yith-pos-order-details__header">
-						<div className="yith-pos-order-details__header__order-number">
+						<div className="yith-pos-order-details__header__order-number" style={{ display: 'flex', alignItems: 'center' }}>
 							{sprintf( __( 'Order #%s', 'yith-point-of-sale-for-woocommerce' ), number )}
 						</div>
 						<div className="yith-pos-order-details__header__details">
 							<div className="yith-pos-order-details__header__details__row">
-                            <span
-								className="order-paid-details">{sprintf( __( 'Paid via %s on %s', 'yith-point-of-sale-for-woocommerce' ),
+                            	<span
+									className="order-paid-details">{sprintf( __( 'Paid via %s on %s', 'yith-point-of-sale-for-woocommerce' ),
 																		 paymentMethodsDetails,
 																		 formattedDateCreated )}</span>
 								<span
@@ -64,6 +79,11 @@ class OrderDetails extends Component {
 							<div className="yith-pos-order-details__header__details__row">
 								{__( 'Customer:', 'yith-point-of-sale-for-woocommerce' )} <strong>{customer}</strong>
 							</div>
+							{/* Added by WisdmLabs */}
+							<div className="yith-pos-order-details__header__details__row">
+								{__( 'Total Points:', 'yith-point-of-sale-for-woocommerce' )} <strong>{order.customer_points ?? '-'}</strong>
+							</div>
+							{/* Added by WisdmLabs */}
 						</div>
 					</div>
 
@@ -154,7 +174,7 @@ class OrderDetails extends Component {
 
 				</div>
 				<div className="yith-pos-order-details__actions">
-					<OrderReceiptPrintControl order={order}/>
+					<OrderReceiptPrintControl order={order} />
 				</div>
 
 			</div>

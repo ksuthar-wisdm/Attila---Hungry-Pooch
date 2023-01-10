@@ -2,6 +2,8 @@ import { __ }              from '@wordpress/i18n';
 import React, { useState } from 'react';
 import PropTypes           from 'prop-types';
 import { noop }            from 'lodash';
+import apiFetch            from '@wordpress/api-fetch';
+import { addQueryArgs }    from '@wordpress/url';
 
 
 import CustomerSelector           from './customer-selector';
@@ -10,9 +12,10 @@ import CustomerInfoBox            from './customer-info-box';
 import Button                     from '../../packages/components/button';
 
 function CustomerDetails( { customer: currentCustomer, onClear, onSelect, onConfirm, mode, onEdit, notFoundRender, currentCustomerFooterRender } ) {
-	const [customer, setCustomer] = useState( currentCustomer );
-	const isGuest                 = customer.id === 0;
-	const label                   = getCustomerSelectLabel( customer );
+	const [customer, setCustomer]   = useState( currentCustomer );
+	const [isLoading, setIsLoading] = useState( false );
+	const isGuest                   = customer.id === 0;
+	const label                     = getCustomerSelectLabel( customer );
 
 	const handleSelect = selectedCustomer => {
 		setCustomer( selectedCustomer );
@@ -33,7 +36,29 @@ function CustomerDetails( { customer: currentCustomer, onClear, onSelect, onConf
 					</div>
 				</div>
 				<CustomerInfoBox customer={customer} onClick={() => onEdit( customer )}/>
-				{'load' === mode && <Button variant="primary" fullWidth onClick={() => onConfirm( customer )}>{__( 'Use this customer profile', 'yith-point-of-sale-for-woocommerce' )}</Button>}
+				{'load' === mode &&
+					<Button
+						className={isLoading ? 'is-loading' : ''}
+						variant="primary"
+						fullWidth
+						/* Modified by WisdmLabs */
+						onClick={ () => {
+							setIsLoading( true );
+							apiFetch( { path: addQueryArgs( 'wdm_yith_customisation/v1/points', { user_id: customer.id } ) } )
+								.then( points => {
+									customer.points = points;
+									setCustomer( customer );
+									onConfirm( customer );
+									setIsLoading( false );
+								} )
+								.catch( error => {
+									setIsLoading( false );
+									alert( error.message );
+								} );
+						} } /* Modified by WisdmLabs */>
+						{__( 'Use this customer profile', 'yith-point-of-sale-for-woocommerce' )}
+					</Button>
+				}
 				{currentCustomerFooterRender()}
 			</>
 		}

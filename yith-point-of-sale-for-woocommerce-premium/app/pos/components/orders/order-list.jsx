@@ -16,7 +16,6 @@ class OrderList extends Component {
 		super( ...arguments );
 	}
 
-
 	render() {
 		const { loading, orders, onChangeDate, currentOrder, onSelectOrder, onViewStats } = this.props;
 

@@ -1,4 +1,4 @@
-import { isValidEmail }                                  from '../../../packages/utils';
+import { isValidEmail, isValidPhone }                    from '../../../packages/utils';
 import { __ }                                            from '@wordpress/i18n';
 import { getCountriesOptions, getStateOptionsByCountry } from '../../../packages/data';
 import { getCustomerVAT }                                from '../../../packages/customers';
@@ -11,6 +11,12 @@ const VAT_LABEL        = getVatFieldLabel();
 export const validateEmail = ( email ) => {
 	return isValidEmail( email ) ? true : __( 'Invalid email address', 'yith-point-of-sale-for-woocommerce' );
 }
+
+/* Added by WisdmLabs */
+export const validatePhone = ( phone ) => {
+	return isValidPhone( phone ) ? true : __( 'Invalid Phone number', 'yith-point-of-sale-for-woocommerce' );
+}
+/* Added by WisdmLabs */
 
 export const getBillingFields = ( values ) => {
 	const { billing_country } = values;
@@ -26,7 +32,7 @@ export const getBillingFields = ( values ) => {
 		{ key: 'billing_company', type: 'text', label: __( 'Company', 'yith-point-of-sale-for-woocommerce' ) },
 		{ key: 'pos_billing_vat', type: 'text', label: VAT_LABEL },
 		{ key: 'billing_email', type: 'text', label: __( 'Email', 'yith-point-of-sale-for-woocommerce' ), isRequired: true, validate: validateEmail },
-		{ key: 'billing_phone', type: 'text', label: __( 'Phone', 'yith-point-of-sale-for-woocommerce' ) },
+		{ key: 'billing_phone', type: 'text', label: __( 'Phone', 'yith-point-of-sale-for-woocommerce' ), isRequired: true, validate: validatePhone },
 		{ key: 'billing_address_1', type: 'text', label: __( 'Address', 'yith-point-of-sale-for-woocommerce' ) },
 		{ key: 'billing_address_2', type: 'text' },
 		{ key: 'billing_city', type: 'text', label: __( 'City', 'yith-point-of-sale-for-woocommerce' ) },

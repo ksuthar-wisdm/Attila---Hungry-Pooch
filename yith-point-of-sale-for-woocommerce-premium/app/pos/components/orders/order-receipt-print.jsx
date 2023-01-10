@@ -279,6 +279,7 @@ class OrderReceiptPrint extends Component {
 			},
 			{ id: 'order-number', show: this.receipt.showOrderNumber(), value: order.number, label: this.receipt.getOrderNumberLabel() },
 			{ id: 'order-customer', show: this.receipt.showOrderCustomer(), value: customer, label: this.receipt.getOrderCustomerLabel() },
+			{ id: 'customer-points', show: this.receipt.showOrderCustomer(), value: order.customer_points, label: __( 'Total Points:', 'yith-point-of-sale-for-woocommerce' ) },
 			{ id: 'order-shipping', show: this.receipt.showShipping(), value: formatAddress( order.shipping ), label: this.receipt.getShippingLabel() },
 			{
 				id   : 'order-register-name',
@@ -307,7 +308,7 @@ class OrderReceiptPrint extends Component {
 				'gift': isGift
 			}
 		);
-
+		
 		return !!order ? ReactDOM.createPortal(
 						   <div id="order-receipt-print" className={classes}>
 							   <div className="receipt__header">{this.getReceiptHeader()}</div>

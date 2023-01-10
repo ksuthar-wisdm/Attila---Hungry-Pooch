@@ -1341,6 +1341,11 @@ textarea:focus {
     display               : grid;
     grid-template-columns : 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas   : ". . . . . . empty-cart" "add-note add-fee-or-discount apply-coupon add-shipping suspend-and-save-cart pay pay ";
+    /* Added by WisdmLabs */
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: "add-note add-note . . . empty-cart empty-cart"
+        "add-fee-or-discount apply-coupon redeem-points add-shipping suspend-and-save-cart pay pay";
+    /* Added by WisdmLabs */
     grid-row-gap          : 10px;
     grid-column-gap       : 10px;
 }
@@ -1392,6 +1397,10 @@ textarea:focus {
 
 .cart-action--apply-coupon {
     grid-area : apply-coupon;
+}
+
+.cart-action--redeem-points {
+    grid-area: redeem-points;
 }
 
 .cart-action--add-note {
@@ -3739,6 +3748,11 @@ span.yith-pos-icon-calculator {
         display               : grid;
         grid-template-columns : 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-template-areas   : ". . . . add-note empty-cart" "add-fee-or-discount apply-coupon add-shipping suspend-and-save-cart pay pay ";
+        /* Added by WisdmLabs */
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-areas: ". . . add-note add-note empty-cart empty-cart"
+            "add-fee-or-discount apply-coupon redeem-points add-shipping suspend-and-save-cart pay pay";
+        /* Added by WisdmLabs */
         grid-row-gap          : 10px;
         grid-column-gap       : 10px;
     }
@@ -3811,6 +3825,8 @@ span.yith-pos-icon-calculator {
         margin : auto 10px;
     }
 }
+
+
 
 @media screen and (max-width : 1023px) {
     .yith-pos {

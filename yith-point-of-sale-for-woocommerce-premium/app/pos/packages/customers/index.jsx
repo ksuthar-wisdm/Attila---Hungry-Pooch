@@ -78,3 +78,25 @@ export const getFormattedAddress = ( customer, type = 'billing' ) => {
 
 	return addressFormat;
 }
+
+/* Added by WisdmLabs */
+/**
+ * Return the customer points.
+ *
+ * @param customer
+ * @returns {int|string}
+ */
+ export const getCustomerPoints = customer => {
+	return 0 === customer.points ? '0' : customer.points;
+}
+
+/**
+ * Update the customer points.
+ *
+ * @param customer
+ * @returns {int|string}
+ */
+ export const updateCustomerPoints = ( customer, points ) => {
+	customer.points = points;
+}
+/* Added by WisdmLabs */
